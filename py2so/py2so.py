@@ -30,7 +30,7 @@ def __py2so(from_path: str,
     if not os.path.isdir(from_abs_path):
         raise ValueError('{} is not directory.'.format(from_abs_path))
     if not os.path.isdir(to_abs_path):
-        raise ValueError('{} is not directory.'.format(to_abs_path))
+        os.makedirs(to_abs_path)
 
     if to_abs_path == from_abs_path:
         to_abs_path += '_compile'
