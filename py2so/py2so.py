@@ -71,7 +71,7 @@ def __py2so(from_path: str,
                       script_args=script_args)
                 os.remove(to_file)
                 os.remove(os.path.join(to_file, os.path.splitext(to_file)[0] + '.c'))
-
+        return from_abs_path, to_abs_path
     else:
         from_abs_path = from_file
         to_abs_path = to_file
@@ -84,6 +84,8 @@ def __py2so(from_path: str,
         for fname in os.listdir(from_abs_path):
             print('fname is {}'.format(fname))
             __py2so(from_abs_path, to_abs_path, fname, exclude_list, del_c, del_py)
+
+        return from_abs_path, to_abs_path
 
 
 def compile_py(from_path,
@@ -103,20 +105,8 @@ def compile_py(from_path,
     :return:
     """
     start_time = time.time()
-    __py2so(from_path, to_path, file_name, exclude_list, del_c, del_py)
-
-    # print('from_abs_path is {}'.format(from_abs_path))
-    # print('to_abs_path is {}'.format(to_abs_path))
-    #
-    # from_abs_path_list = os.listdir(from_abs_path)
-    # to_abs_path_list = os.listdir(to_abs_path)
-    #
-    # diff_list = list(set(to_abs_path_list).difference(set(from_abs_path_list)))
-    # print('diff list is {}'.format(diff_list))
-    #
-    # for diff_file in diff_list:
-    #     del_file = os.path.join(to_abs_path, diff_file)
-    #     if os.path.isdir(del_file):
-    #         shutil.rmtree(del_file)
-
+    from_abs_path, to_abs_path = __py2so(from_path, to_path, file_name, exclude_list, del_c, del_py)
+    temp_path = to_abs_path + os.path.split(os.environ['HOME'])[0]
+    print('Temp path is {}'.format(temp_path))
+    shutil.rmtree(temp_path)
     print("complete! time:", time.time() - start_time, 's')
