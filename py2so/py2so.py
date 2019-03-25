@@ -88,6 +88,18 @@ def __py2so(from_path: str,
         return from_abs_path, to_abs_path
 
 
+def __del_temp_dir(temp_dir,
+                   del_list: list = []):
+    for root, dirs, files in os.walk(os.path.abspath(temp_dir)):
+        print('root is {}'.format(root))
+        print('dirs is {}'.format(dirs))
+        print('files is {}'.format(files))
+        for del_dir in list(set(del_list).intersection(set(dirs))):
+            shutil.rmtree(os.path.join(root, del_dir))
+        for del_file in list(set(del_list).intersection(set(files))):
+            os.remove(del_file)
+
+
 def compile_py(from_path,
                to_path,
                file_name='',
@@ -106,7 +118,5 @@ def compile_py(from_path,
     """
     start_time = time.time()
     from_abs_path, to_abs_path = __py2so(from_path, to_path, file_name, exclude_list, del_c, del_py)
-    temp_path = to_abs_path + os.path.split(os.environ['HOME'])[0]
-    print('Temp path is {}'.format(temp_path))
-    shutil.rmtree(temp_path)
+    __del_temp_dir(to_abs_path, [os.path.split(os.environ['HOME'])[0][1:]])
     print("complete! time:", time.time() - start_time, 's')
