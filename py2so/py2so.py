@@ -2,8 +2,11 @@ import os
 import time
 import shutil
 import platform
+import copy
 from distutils.core import setup
 from Cython.Build import cythonize
+
+DEFAULT_EXCLUDE_LIST = ['.idea', '.git', '.DS_Store', '.gitignore', '__pycache__']
 
 
 def __py2so(from_path: str,
@@ -118,5 +121,7 @@ def compile_py(from_path,
     """
     start_time = time.time()
     from_abs_path, to_abs_path = __py2so(from_path, to_path, file_name, exclude_list, del_c, del_py)
-    __del_temp_dir(to_abs_path, [os.path.split(os.environ['HOME'])[0][1:]])
+    del_list = [os.path.split(os.environ['HOME'])[0][1:]]
+    del_list.extend(DEFAULT_EXCLUDE_LIST)
+    __del_temp_dir(to_abs_path, del_list)
     print("complete! time:", time.time() - start_time, 's')
