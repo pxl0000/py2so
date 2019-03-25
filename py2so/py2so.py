@@ -91,9 +91,17 @@ def __py2so(from_path: str,
         return from_abs_path, to_abs_path
 
 
-def __del_temp_dir(temp_dir,
+def __del_temp_dir(temp_dir: str,
                    del_list: list = []):
-    for root, dirs, files in os.walk(os.path.abspath(temp_dir)):
+    """
+    Delete redundant files
+    :param temp_dir:
+    :param del_list:
+    :return:
+    """
+    temp_dir = os.path.abspath(temp_dir)
+    print(temp_dir)
+    for root, dirs, files in os.walk(temp_dir):
         print('root is {}'.format(root))
         print('dirs is {}'.format(dirs))
         print('files is {}'.format(files))
